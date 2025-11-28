@@ -25,7 +25,9 @@ make
 - `-h` - Display help message
 - `-b` - Use bold characters
 - `-R` - Enable rainbow mode (color cycling)
+- `-s` - Enable screensaver mode (terminates on any keypress)
 - `-c [color]` - Set cube color
+- `-C [character]` - Set cube character
 - `-d [0-10]` - Set animation delay (default: 5, lower = faster)
 
 ### Examples
@@ -42,6 +44,9 @@ make
 
 # Slow cyan cube
 ./ccube -c cyan -d 8
+
+# Rainbow cube with * characters
+./ccube -R -C *
 ```
 
 ## Controls
