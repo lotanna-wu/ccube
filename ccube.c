@@ -94,7 +94,7 @@ void usage(void) {
     printf(" Usage: ccube -[bhnRs] [-c color] [-d delay]\n");
     printf(" -b: Set bold mode\n");
     printf(" -s: Set screensaver mode\n");
-    printf(" -s: Set nested mode\n");
+    printf(" -n: Set nested mode\n");
     printf(" -R: Set rainbow mode\n");
     printf(" -c [color]: Set cube color\n");
     printf(" -C [character]: Set the ASCII character for the cube\n");
