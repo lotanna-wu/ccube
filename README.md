@@ -56,5 +56,5 @@ make
 
 ## Compatibility
 
-- **Linux/macOS**: Full support
+- **Linux/macOS**: Full support (macOS colors might be weird)
 - **Windows**:
