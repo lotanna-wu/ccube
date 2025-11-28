@@ -91,9 +91,10 @@ void init_termscreen(void);
 void hsv_to_rgb(float h, float s, float v, int *r, int *g, int *b);
 
 void usage(void) {
-    printf(" Usage: ccube -[bhRs] [-c color] [-d delay]\n");
+    printf(" Usage: ccube -[bhnRs] [-c color] [-d delay]\n");
     printf(" -b: Set bold mode\n");
     printf(" -s: Set screensaver mode\n");
+    printf(" -s: Set nested mode\n");
     printf(" -R: Set rainbow mode\n");
     printf(" -c [color]: Set cube color\n");
     printf(" -C [character]: Set the ASCII character for the cube\n");
@@ -111,15 +112,19 @@ int main(int argc, char *argv[]) {
     int screensaver = 0;
     int bold = 0;
     int rainbow = 0;
+    int nested = 0;
     int delay = 5;
     char ascii = '#';
-    while((opt = getopt(argc, argv, "hbRsc:C:d:")) != -1) {
+    while((opt = getopt(argc, argv, "bhnRsc:C:d:")) != -1) {
         switch(opt){
             case 'h':
                 usage();
                 return 0;
             case 'b':
                 bold = 1;
+                break;
+            case 'n':
+                nested = 1;
                 break;
             case 's':
                 screensaver = 1;
@@ -244,6 +249,11 @@ int main(int argc, char *argv[]) {
         int offset_x = g_cols / 2;
         int offset_y = g_rows / 2;
         draw_cube(edges, size, offset_x, offset_y, ascii);
+        
+        if(nested && size >= 7) {
+            draw_cube(edges, size / 1.5, offset_x, offset_y, ascii);
+        }
+
         flush_buffer(g_rows, g_cols);
         
         if(rainbow) {
@@ -316,12 +326,12 @@ void flush_buffer(int rows, int cols) {
 
 void cleanup_buffer(void) {
     free(frame_buffer);
-    printf(SHOW_CURSOR RESET_ATTRIBUTES);
 }
 
 void kill_cube(int sig) {
     (void)sig;
     cleanup_buffer();
+    printf(SHOW_CURSOR RESET_ATTRIBUTES);
     restore_input();
     int res = system("clear");
     (void)res;

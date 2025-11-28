@@ -24,6 +24,7 @@ make
 
 - `-h` - Display help message
 - `-b` - Use bold characters
+- `-n` - Enable nested mode (smaller cube inside the larger one)
 - `-R` - Enable rainbow mode (color cycling)
 - `-s` - Enable screensaver mode (terminates on any keypress)
 - `-c [color]` - Set cube color
