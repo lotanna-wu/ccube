@@ -429,7 +429,7 @@ void set_rotation_matrices(float theta) {
 void* _malloc(size_t size) {
     void* ptr = malloc(size);
     if (ptr == NULL) {
-        fprintf(stderr, "failed to allocate %zu bytes of memory\n", size);
+        fprintf(stderr, "Failed to allocate %zu bytes of memory\n", size);
         restore_input();
         printf(SHOW_CURSOR RESET_ATTRIBUTES);
         exit(1);
@@ -458,7 +458,7 @@ void hsv_to_rgb(float h, float s, float v, int *r, int *g, int *b) {
 void disable_input(void) {
     struct termios raw;
     
-    tcgetattr(STDIN_FILENO, &orig_termios); // save original terminal settings
+    tcgetattr(STDIN_FILENO, &orig_termios);
     raw = orig_termios; 
     
     raw.c_lflag &= ~(ECHO | ICANON);
