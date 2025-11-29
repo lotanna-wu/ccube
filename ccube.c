@@ -84,6 +84,7 @@ float RZ_MATRIX[3][3];
 void set_rotation_matrices(float theta);
 void rotate_vertex(vertex_t *v, float rmatrix[3][3]);
 void rotate_cube(vertex_t *vertices[8]);
+void project(const vertex_t *p, int *x, int *y, int size);
 void draw_line(int x0, int y0, int x1, int y1, char c);
 void draw_cube(edge_t *edges[12], int size, int offset_x, int offset_y, char c);
 void init_termstyle(char* color, int bold, int rainbow);
@@ -240,7 +241,6 @@ int main(int argc, char *argv[]) {
     float theta = 0;
     float hue = 0;
     while(1) {        
-        theta += 0.05;
         set_rotation_matrices(theta);
         rotate_cube(vertices);
         clear_buffer();
@@ -264,6 +264,7 @@ int main(int argc, char *argv[]) {
         }
 
         if(screensaver) check_keypress_exit();
+        theta += 0.04;
         SLEEP_MS(delay);
     }
     
@@ -280,7 +281,6 @@ void get_terminal_size(int *rows, int *cols) {
 void init_buffer(int rows, int cols) {
     buffer_size = rows * cols;
     frame_buffer = (char*)_malloc(buffer_size);
-
 }
 
 void init_termscreen(void){
@@ -411,12 +411,24 @@ void draw_cube(edge_t *edges[12], int size, int offset_x, int offset_y, char c) 
         vertex_t *p0 = edge->p0;
         vertex_t *p1 = edge->p1;
 
-        int x0 = (int)(p0->pos[0] * size + 0.5f) + offset_x;
-        int y0 = (int)(p0->pos[1] * size + 0.5f) + offset_y;
-        int x1 = (int)(p1->pos[0] * size + 0.5f) + offset_x;
-        int y1 = (int)(p1->pos[1] * size + 0.5f) + offset_y;
+        int x0, y0;
+        int x1, y1;
+        project(p0, &x0, &y0, size);
+        project(p1, &x1, &y1, size);
+
+        x0 += offset_x;
+        y0 += offset_y;
+        x1 += offset_x;
+        y1 += offset_y;
         draw_line(x0, y0, x1, y1, c);
     }
+}
+
+void project(const vertex_t *p, int *x, int *y, int size) {
+    float distance = 20;
+    float factor = distance / (distance + p->pos[2]);
+    *x = (int)(size * p->pos[0] * factor * 2);
+    *y = (int)(size * p->pos[1] * factor);
 }
 
 void set_rotation_matrices(float theta) {
@@ -487,5 +499,6 @@ int kbhit(void) {
     fd_set fds;
     FD_ZERO(&fds);
     FD_SET(STDIN_FILENO, &fds);
-    return select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv) > 0;
+    return select(STDOUT_FILENO, &fds, NULL, NULL, &tv) > 0;
 }
+
